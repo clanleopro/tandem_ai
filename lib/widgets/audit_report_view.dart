@@ -161,10 +161,11 @@ class _AuditReportViewState extends State<AuditReportView> {
 
           const SizedBox(height: 20),
 
-          // Tally Pills
+          // Tally Pills + AI Auditor CTA
           Wrap(
             spacing: 12,
             runSpacing: 8,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               _buildTallyBadge(
                 label: 'Critical Violations',
@@ -184,25 +185,30 @@ class _AuditReportViewState extends State<AuditReportView> {
                 color: AppTheme.greenCompliant,
                 icon: Icons.verified_outlined,
               ),
-              const Spacer(),
-              ElevatedButton.icon(
-                onPressed: () => widget.onOpenAuditorChat(null),
-                icon: const Icon(Icons.psychology, color: Colors.black, size: 18),
-                label: const Text(
-                  'Solve Rework in AI Auditor',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13,
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.cyanAccent,
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Align(
+            alignment: Alignment.centerRight,
+            child: ElevatedButton.icon(
+              onPressed: () => widget.onOpenAuditorChat(null),
+              icon: const Icon(Icons.terminal_outlined, color: Colors.white, size: 18),
+              label: const Text(
+                'Solve Rework in AI Auditor',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 13,
                 ),
               ),
-            ],
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppTheme.accentRed,
+                foregroundColor: Colors.white,
+                elevation: 0,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusLg)),
+              ),
+            ),
           ),
         ],
       ),
@@ -371,28 +377,41 @@ class _AuditReportViewState extends State<AuditReportView> {
   }
 
   Widget _buildFindingsHeader(AuditReport report) {
-    return Row(
-      children: [
-        const Text(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isNarrow = constraints.maxWidth < 720;
+        final heading = const Text(
           'Clause-by-Clause Compliance Findings',
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 17,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
-        ),
-        const Spacer(),
-        // Filter Buttons
-        Wrap(
+        );
+        final chips = Wrap(
           spacing: 8,
+          runSpacing: 6,
           children: [
             _buildFilterChip('All (${report.findings.length})', null),
             _buildFilterChip('Violations (${report.violationsCount})', FindingStatus.violation),
             _buildFilterChip('Warnings (${report.warningsCount})', FindingStatus.warning),
             _buildFilterChip('Compliant (${report.compliantCount})', FindingStatus.compliant),
           ],
-        ),
-      ],
+        );
+        if (isNarrow) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [heading, const SizedBox(height: 10), chips],
+          );
+        }
+        return Row(
+          children: [
+            Expanded(child: heading),
+            const SizedBox(width: 16),
+            chips,
+          ],
+        );
+      },
     );
   }
 
@@ -402,14 +421,14 @@ class _AuditReportViewState extends State<AuditReportView> {
       label: Text(label),
       selected: isSelected,
       onSelected: (_) => setState(() => _statusFilter = status),
-      selectedColor: AppTheme.cyanAccent.withValues(alpha: 0.2),
+      selectedColor: AppTheme.accentRed.withValues(alpha: 0.15),
       labelStyle: TextStyle(
         fontSize: 11,
-        color: isSelected ? AppTheme.cyanAccent : AppTheme.textSecondary,
+        color: isSelected ? AppTheme.accentRed : AppTheme.textSecondary,
         fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
       ),
       side: BorderSide(
-        color: isSelected ? AppTheme.cyanAccent : AppTheme.cardBorder,
+        color: isSelected ? AppTheme.accentRed : AppTheme.cardBorder,
       ),
     );
   }
@@ -453,14 +472,17 @@ class _AuditReportViewState extends State<AuditReportView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Top Row
-          Row(
+          // Top Row — wraps on narrow screens
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: statusColor.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: BorderRadius.circular(AppTheme.radiusSm),
                   border: Border.all(color: statusColor.withValues(alpha: 0.4)),
                 ),
                 child: Row(
@@ -479,38 +501,36 @@ class _AuditReportViewState extends State<AuditReportView> {
                   ],
                 ),
               ),
-              const SizedBox(width: 10),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: AppTheme.surfaceDark,
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: BorderRadius.circular(AppTheme.radiusSm),
+                  border: Border.all(color: AppTheme.cardBorder),
                 ),
                 child: Text(
                   finding.clauseRef,
                   style: AppTheme.monoStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.bold,
-                    color: AppTheme.cyanAccent,
+                    color: AppTheme.accentRed,
                   ),
                 ),
               ),
-              const SizedBox(width: 10),
               Text(
                 finding.category,
                 style: const TextStyle(fontSize: 11, color: AppTheme.textMuted),
               ),
-              const Spacer(),
               if (finding.status != FindingStatus.compliant)
                 TextButton.icon(
                   onPressed: () => widget.onOpenAuditorChat('Solve finding: ${finding.clauseRef} - ${finding.clauseTitle}'),
-                  icon: const Icon(Icons.chat_bubble_outline, size: 14, color: AppTheme.cyanAccent),
+                  icon: const Icon(Icons.chat_bubble_outline, size: 14, color: AppTheme.accentRed),
                   label: const Text(
                     'Ask Auditor To Solve',
                     style: TextStyle(
                       fontSize: 12,
-                      color: AppTheme.cyanAccent,
-                      fontWeight: FontWeight.bold,
+                      color: AppTheme.accentRed,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
