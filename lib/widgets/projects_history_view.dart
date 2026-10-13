@@ -19,43 +19,21 @@ class ProjectsHistoryView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
+        const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Rigging Audit Projects & Records',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  'Historical lift plans, engineering reviews, and standards verification logs',
-                  style: TextStyle(fontSize: 13, color: AppTheme.textSecondary),
-                ),
-              ],
+            Text(
+              'Rigging Audit Projects & Records',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
-            const Spacer(),
-            ElevatedButton.icon(
-              onPressed: onStartNewProject,
-              icon: const Icon(Icons.add, size: 16, color: Colors.black),
-              label: const Text(
-                'New Project Audit',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 13,
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.cyanAccent,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-              ),
+            SizedBox(height: 4),
+            Text(
+              'Historical lift plans, engineering reviews, and standards verification logs',
+              style: TextStyle(fontSize: 13, color: AppTheme.textSecondary),
             ),
           ],
         ),
@@ -124,11 +102,16 @@ class ProjectsHistoryView extends StatelessWidget {
             Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: statusColor.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: statusColor.withValues(alpha: 0.3)),
+                    border: Border.all(
+                      color: statusColor.withValues(alpha: 0.3),
+                    ),
                   ),
                   child: Text(
                     project.status.toUpperCase(),
@@ -141,14 +124,20 @@ class ProjectsHistoryView extends StatelessWidget {
                 ),
                 const Spacer(),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 3,
+                  ),
                   decoration: BoxDecoration(
                     color: AppTheme.surfaceDark,
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
                     project.standard.code,
-                    style: AppTheme.monoStyle(fontSize: 10, color: AppTheme.cyanAccent),
+                    style: AppTheme.monoStyle(
+                      fontSize: 10,
+                      color: AppTheme.cyanAccent,
+                    ),
                   ),
                 ),
               ],
@@ -175,7 +164,10 @@ class ProjectsHistoryView extends StatelessWidget {
               '${project.siteLocation} • ${project.client}',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 11, color: AppTheme.textSecondary),
+              style: const TextStyle(
+                fontSize: 11,
+                color: AppTheme.textSecondary,
+              ),
             ),
 
             const Spacer(),
@@ -189,20 +181,31 @@ class ProjectsHistoryView extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.picture_as_pdf, size: 16, color: AppTheme.amberWarning),
+                  const Icon(
+                    Icons.picture_as_pdf,
+                    size: 16,
+                    color: AppTheme.amberWarning,
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       project.projectFile.fileName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: AppTheme.monoStyle(fontSize: 10, color: Colors.white),
+                      style: AppTheme.monoStyle(
+                        fontSize: 10,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 8),
                   Text(
                     '${project.projectFile.totalLoadWeightTons} MT',
-                    style: AppTheme.monoStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppTheme.cyanAccent),
+                    style: AppTheme.monoStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.cyanAccent,
+                    ),
                   ),
                 ],
               ),

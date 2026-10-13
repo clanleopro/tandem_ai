@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import '../data/sample_data.dart';
-import '../models/rigging_models.dart';
-import '../theme/app_theme.dart';
-import '../widgets/ai_auditor_console.dart';
-import '../widgets/audit_report_view.dart';
-import '../widgets/audit_wizard.dart';
-import '../widgets/hero_banner.dart';
-import '../widgets/nav_header.dart';
-import '../widgets/projects_history_view.dart';
-import '../widgets/standards_vault_dialog.dart';
+import '../../data/sample_data.dart';
+import '../../models/rigging_models.dart';
+import '../../theme/app_theme.dart';
+import '../../widgets/ai_auditor_console.dart';
+import '../../widgets/audit_report_view.dart';
+import '../../widgets/audit_wizard.dart';
+import '../../widgets/hero_banner.dart';
+import '../../widgets/nav_header.dart';
+import '../../widgets/projects_history_view.dart';
+import '../../widgets/standards_vault_dialog.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -203,17 +203,17 @@ class _HomeViewState extends State<HomeView> {
       decoration: BoxDecoration(
         color: AppTheme.surfaceDark,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.redViolation.withValues(alpha: 0.4)),
+      border: Border.all(color: AppTheme.accentRed.withValues(alpha: 0.4)),
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: AppTheme.redViolation.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(10),
+              color: AppTheme.accentRed.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(AppTheme.radiusSm),
             ),
-            child: const Icon(Icons.warning_amber_rounded, color: AppTheme.redViolation, size: 28),
+            child: const Icon(Icons.warning_amber_rounded, color: AppTheme.accentRed, size: 28),
           ),
           const SizedBox(width: 18),
           Expanded(
@@ -224,10 +224,10 @@ class _HomeViewState extends State<HomeView> {
                   children: [
                     const Text(
                       'ACTIVE AUDIT ALERT • REWORK REQUIRED',
-                      style: TextStyle(
+                    style: TextStyle(
                         fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.redViolation,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.accentRed,
                         letterSpacing: 0.5,
                       ),
                     ),
@@ -240,7 +240,7 @@ class _HomeViewState extends State<HomeView> {
                       ),
                       child: Text(
                         '71% Compliance',
-                        style: AppTheme.monoStyle(fontSize: 11, color: AppTheme.amberWarning, fontWeight: FontWeight.bold),
+                        style: AppTheme.monoStyle(fontSize: 11, color: AppTheme.amberWarning, fontWeight: FontWeight.w700),
                       ),
                     ),
                   ],
@@ -257,9 +257,11 @@ class _HomeViewState extends State<HomeView> {
           ElevatedButton(
             onPressed: () => setState(() => _activeTabIndex = 1),
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.redViolation,
+              backgroundColor: AppTheme.accentRed,
+              foregroundColor: Colors.white,
+              elevation: 0,
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusLg)),
             ),
             child: const Text(
               'Inspect Report',
@@ -270,12 +272,12 @@ class _HomeViewState extends State<HomeView> {
           OutlinedButton(
             onPressed: () => _navigateToAuditorChat(null),
             style: OutlinedButton.styleFrom(
-              foregroundColor: AppTheme.cyanAccent,
-              side: const BorderSide(color: AppTheme.cyanAccent),
+              foregroundColor: AppTheme.textSecondary,
+              side: const BorderSide(color: AppTheme.cardBorderGlow),
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusLg)),
             ),
-            child: const Text('Open AI Auditor', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+            child: const Text('Open AI Auditor', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
           ),
         ],
       ),
@@ -295,16 +297,16 @@ class _HomeViewState extends State<HomeView> {
         children: [
           Row(
             children: [
-              const Icon(Icons.verified_user_outlined, size: 20, color: AppTheme.cyanAccent),
+              const Icon(Icons.verified_user_outlined, size: 18, color: AppTheme.accentRed),
               const SizedBox(width: 10),
               const Text(
-                'Active Standards Vault (Integrated Regulatory Schemas)',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                'Active Standards Vault',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: Colors.white),
               ),
               const Spacer(),
               TextButton(
                 onPressed: _openStandardsVault,
-                child: const Text('Manage All Standards →', style: TextStyle(color: AppTheme.cyanAccent)),
+                child: const Text('Manage All →', style: TextStyle(color: AppTheme.accentRed, fontSize: 12, fontWeight: FontWeight.w600)),
               ),
             ],
           ),
@@ -316,8 +318,8 @@ class _HomeViewState extends State<HomeView> {
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                 decoration: BoxDecoration(
-                  color: AppTheme.surfaceDark,
-                  borderRadius: BorderRadius.circular(10),
+                  color: AppTheme.cardDark,
+                  borderRadius: BorderRadius.circular(AppTheme.radiusSm),
                   border: Border.all(color: AppTheme.cardBorder),
                 ),
                 child: Row(
@@ -326,15 +328,15 @@ class _HomeViewState extends State<HomeView> {
                     Text(
                       s.code,
                       style: AppTheme.monoStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.cyanAccent,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.textPrimary,
                       ),
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      '(${s.clausesCount} clauses)',
-                      style: const TextStyle(fontSize: 11, color: AppTheme.textMuted),
+                      '${s.clausesCount} cls',
+                      style: const TextStyle(fontSize: 10, color: AppTheme.textMuted),
                     ),
                   ],
                 ),
@@ -381,24 +383,26 @@ class _HomeViewState extends State<HomeView> {
                 icon: const Icon(Icons.refresh, size: 16),
                 label: const Text('Re-Verify / New Audit'),
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: AppTheme.cyanAccent,
-                  side: const BorderSide(color: AppTheme.cyanAccent),
+                  foregroundColor: AppTheme.textSecondary,
+                  side: const BorderSide(color: AppTheme.cardBorder),
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusLg)),
                 ),
               ),
               const SizedBox(width: 12),
               ElevatedButton.icon(
                 onPressed: () => _navigateToAuditorChat(null),
-                icon: const Icon(Icons.psychology, color: Colors.black, size: 18),
+                icon: const Icon(Icons.terminal_outlined, color: Colors.white, size: 18),
                 label: const Text(
                   'Launch AI Auditor Console',
-                  style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.cyanAccent,
+                  backgroundColor: AppTheme.accentRed,
+                  foregroundColor: Colors.white,
+                  elevation: 0,
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusLg)),
                 ),
               ),
             ],
@@ -434,8 +438,14 @@ class _HomeViewState extends State<HomeView> {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () => setState(() => _isWizardMode = true),
-                  style: ElevatedButton.styleFrom(backgroundColor: AppTheme.cyanAccent),
-                  child: const Text('Launch Verification Wizard', style: TextStyle(color: Colors.black)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.accentRed,
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusLg)),
+                  ),
+                  child: const Text('Launch Verification Wizard', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
                 ),
               ],
             ),
@@ -473,8 +483,8 @@ class _HomeViewState extends State<HomeView> {
             const Spacer(),
             TextButton.icon(
               onPressed: () => setState(() => _activeTabIndex = 1),
-              icon: const Icon(Icons.arrow_back, size: 16, color: AppTheme.cyanAccent),
-              label: const Text('Back to Audit Report', style: TextStyle(color: AppTheme.cyanAccent)),
+              icon: const Icon(Icons.arrow_back, size: 16, color: AppTheme.textSecondary),
+              label: const Text('Back to Audit Report', style: TextStyle(color: AppTheme.textSecondary)),
             ),
           ],
         ),
@@ -521,7 +531,7 @@ class _HomeViewState extends State<HomeView> {
           ),
           const Spacer(),
           Text(
-            'Tandem Tandem AI • Precision Lifting Standards Compliance System',
+            'Tandem AI • Precision Lifting Standards Compliance',
             style: const TextStyle(fontSize: 11, color: AppTheme.textMuted),
           ),
         ],
