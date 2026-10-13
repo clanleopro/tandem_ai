@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
-import 'theme/app_theme.dart';
-import 'views/home/home_view.dart';
+import 'package:get/get.dart';
+import 'core/routes/app_routes.dart';
+import 'core/theme/app_theme.dart';
+import 'shared/controllers/auth_controller.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const RigGuardApp());
+  Get.put(AuthController(), permanent: true);
+  runApp(const TandemAiApp());
 }
 
-class RigGuardApp extends StatelessWidget {
-  const RigGuardApp({super.key});
+class TandemAiApp extends StatelessWidget {
+  const TandemAiApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Tandem AI • Rigging Standards Compliance Engine',
+    return GetMaterialApp(
+      title: 'TANDEM AI • Rigging Standards Compliance Verifier',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkTheme,
-      home: const HomeView(),
+      initialRoute: AppRoutes.home,
+      getPages: AppRoutes.pages,
     );
   }
 }
