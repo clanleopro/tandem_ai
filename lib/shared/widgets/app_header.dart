@@ -141,13 +141,8 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
 
           const SizedBox(width: 12),
 
-          // ─── RIGHT: ONLY 2 ACTIONS (START NEW AUDIT & LOGIN) ───────────────
           _buildLoginButton(context, isMobile),
 
-          // const SizedBox(width: 10),
-
-          // // 2. START NEW AUDIT (Primary Red Action)
-          // _buildStartAuditButton(isMobile),
         ],
       ),
     );
@@ -233,31 +228,5 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
     });
   }
 
-  Widget _buildStartAuditButton(bool isMobile) {
-    return ElevatedButton.icon(
-      onPressed: _handleStartNewAudit,
-      icon: const Icon(Icons.add_rounded, size: 17, color: Colors.white),
-      label: Text(
-        isMobile ? 'New Audit' : AppConstants.ctaStartAudit,
-        style: const TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w700,
-          color: Colors.white,
-          letterSpacing: 0.3,
-        ),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppTheme.accentRed,
-        foregroundColor: Colors.white,
-        elevation: 0,
-        padding: EdgeInsets.symmetric(
-          horizontal: isMobile ? 12 : 18,
-          vertical: 12,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppTheme.radiusMd),
-        ),
-      ),
-    );
-  }
+ 
 }
