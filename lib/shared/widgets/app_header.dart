@@ -8,10 +8,7 @@ import '../controllers/auth_controller.dart';
 class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onStartNewAudit;
 
-  const AppHeader({
-    super.key,
-    this.onStartNewAudit,
-  });
+  const AppHeader({super.key, this.onStartNewAudit});
 
   @override
   Size get preferredSize => const Size.fromHeight(72);
@@ -145,18 +142,12 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
           const SizedBox(width: 12),
 
           // ─── RIGHT: ONLY 2 ACTIONS (START NEW AUDIT & LOGIN) ───────────────
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // 1. LOGIN (Secondary Button)
-              _buildLoginButton(context, isMobile),
+          _buildLoginButton(context, isMobile),
 
-              const SizedBox(width: 10),
+          // const SizedBox(width: 10),
 
-              // 2. START NEW AUDIT (Primary Red Action)
-              _buildStartAuditButton(isMobile),
-            ],
-          ),
+          // // 2. START NEW AUDIT (Primary Red Action)
+          // _buildStartAuditButton(isMobile),
         ],
       ),
     );
@@ -177,7 +168,11 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
             color: AppTheme.greenCompliant,
           ),
           label: Text(
-            isMobile ? 'PE' : (auth.engineerName.value.isNotEmpty ? auth.engineerName.value.split(' ').first : 'Eng.'),
+            isMobile
+                ? 'PE'
+                : (auth.engineerName.value.isNotEmpty
+                      ? auth.engineerName.value.split(' ').first
+                      : 'Eng.'),
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
