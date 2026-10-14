@@ -187,144 +187,253 @@ class AuditWizardView extends GetView<AuditController> {
   }
 
   // ─── STEP 1: SELECT REGULATORY STANDARD ───────────────────────────────────
-  Widget _buildStep1SelectStandard() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Step 1 • Select Regulatory Rigging Standard',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
-        ),
-        const SizedBox(height: 6),
-        const Text(
-          'Choose the baseline standard or regulatory code to evaluate your lift plan against.',
-          style: TextStyle(fontSize: 13, color: AppTheme.textSecondary),
-        ),
-        const SizedBox(height: 24),
-        LayoutBuilder(
-          builder: (context, constraints) {
-            final isCompact = constraints.maxWidth < 700;
-            return GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: isCompact ? 1 : 2,
-                mainAxisExtent: 200,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
+ Widget _buildStep1SelectStandard() {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      LayoutBuilder(
+        builder: (context, constraints) {
+          final uploadButton = OutlinedButton.icon(
+            onPressed: () async {
+              final draft = await controller.openStandardsVault();
+              if (draft == null) return;
+
+              // Send draft.name and draft.file to your standards upload API here.
+            },
+            icon: const Icon(Icons.upload_file, size: 17),
+            label: const Text('Upload Standard'),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: AppTheme.textPrimary,
+              side: const BorderSide(color: AppTheme.cardBorder),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 18,
+                vertical: 14,
               ),
-              itemCount: controller.standards.length,
-              itemBuilder: (context, index) {
-                final std = controller.standards[index];
-                return Obx(() {
-                  final isSelected = controller.selectedStandard.value?.id == std.id;
-                  return InkWell(
-                    onTap: () => controller.selectStandard(std),
-                    borderRadius: BorderRadius.circular(AppTheme.radiusMd),
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: AppTheme.cardDark,
-                        borderRadius: BorderRadius.circular(AppTheme.radiusMd),
-                        border: Border.all(
-                          color: isSelected ? AppTheme.accentRed : AppTheme.cardBorder,
-                          width: isSelected ? 1.5 : 1,
-                        ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppTheme.radiusMd),
+              ),
+            ),
+          );
+
+          const stepHeading = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Step 1 • Select Regulatory Rigging Standard',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.textPrimary,
+                ),
+              ),
+              SizedBox(height: 6),
+              Text(
+                'Choose the baseline standard or regulatory code to evaluate your lift plan against.',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: AppTheme.textSecondary,
+                ),
+              ),
+            ],
+          );
+
+          if (constraints.maxWidth < 700) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                stepHeading,
+                const SizedBox(height: 14),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: uploadButton,
+                ),
+              ],
+            );
+          }
+
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Expanded(child: stepHeading),
+              const SizedBox(width: 16),
+              uploadButton,
+            ],
+          );
+        },
+      ),
+
+      const SizedBox(height: 24),
+
+      LayoutBuilder(
+        builder: (context, constraints) {
+          final isCompact = constraints.maxWidth < 700;
+
+          return GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: isCompact ? 1 : 2,
+              mainAxisExtent: 200,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+            ),
+            itemCount: controller.standards.length,
+            itemBuilder: (context, index) {
+              final std = controller.standards[index];
+
+              return Obx(() {
+                final isSelected =
+                    controller.selectedStandard.value?.id == std.id;
+
+                return InkWell(
+                  onTap: () => controller.selectStandard(std),
+                  borderRadius: BorderRadius.circular(AppTheme.radiusMd),
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: AppTheme.cardDark,
+                      borderRadius: BorderRadius.circular(AppTheme.radiusMd),
+                      border: Border.all(
+                        color: isSelected
+                            ? AppTheme.accentRed
+                            : AppTheme.cardBorder,
+                        width: isSelected ? 1.5 : 1,
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Flexible(
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
                                 decoration: BoxDecoration(
                                   color: isSelected
-                                      ? AppTheme.accentRed.withValues(alpha: 0.15)
+                                      ? AppTheme.accentRed.withValues(
+                                          alpha: 0.15,
+                                        )
                                       : AppTheme.surfaceDark,
                                   borderRadius: BorderRadius.circular(4),
                                   border: Border.all(
-                                    color: isSelected ? AppTheme.accentRed : AppTheme.cardBorder,
+                                    color: isSelected
+                                        ? AppTheme.accentRed
+                                        : AppTheme.cardBorder,
                                   ),
                                 ),
                                 child: Text(
                                   std.code,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                   style: AppTheme.monoStyle(
                                     fontSize: 11,
                                     fontWeight: FontWeight.w700,
-                                    color: isSelected ? AppTheme.accentRed : AppTheme.textPrimary,
+                                    color: isSelected
+                                        ? AppTheme.accentRed
+                                        : AppTheme.textPrimary,
                                   ),
                                 ),
                               ),
-                              const Spacer(),
-                              if (isSelected)
-                                const Icon(Icons.check_circle, size: 20, color: AppTheme.accentRed)
-                              else
-                                const Icon(Icons.radio_button_off, size: 20, color: AppTheme.textMuted),
-                            ],
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            std.title,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
-                              color: AppTheme.textPrimary,
                             ),
+                            const Spacer(),
+                            Icon(
+                              isSelected
+                                  ? Icons.check_circle
+                                  : Icons.radio_button_off,
+                              size: 20,
+                              color: isSelected
+                                  ? AppTheme.accentRed
+                                  : AppTheme.textMuted,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          std.title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: AppTheme.textPrimary,
                           ),
-                          const SizedBox(height: 6),
-                          Text(
-                            std.organization,
-                            style: const TextStyle(fontSize: 12, color: AppTheme.textMuted),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          std.organization,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: AppTheme.textMuted,
                           ),
-                          const Spacer(),
-                          Row(
-                            children: [
-                              Text(
+                        ),
+                        const Spacer(),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
                                 '${std.clausesCount} verification clauses',
-                                style: AppTheme.monoStyle(fontSize: 10, color: AppTheme.textSecondary),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTheme.monoStyle(
+                                  fontSize: 10,
+                                  color: AppTheme.textSecondary,
+                                ),
                               ),
-                              const Spacer(),
-                              Text(
+                            ),
+                            const SizedBox(width: 8),
+                            Flexible(
+                              child: Text(
                                 std.category,
-                                style: const TextStyle(fontSize: 11, color: AppTheme.textSecondary),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.end,
+                                style: const TextStyle(
+                                  fontSize: 11,
+                                  color: AppTheme.textSecondary,
+                                ),
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  );
-                });
-              },
-            );
-          },
-        ),
-        const SizedBox(height: 32),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            ElevatedButton.icon(
-              onPressed: controller.nextStep,
-              icon: const Icon(Icons.arrow_forward, size: 16),
-              label: const Text('Proceed to Lift Plan Staging'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.accentRed,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppTheme.radiusMd),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
+                  ),
+                );
+              });
+            },
+          );
+        },
+      ),
 
+      const SizedBox(height: 32),
+
+      Align(
+        alignment: Alignment.centerRight,
+        child: ElevatedButton.icon(
+          onPressed: controller.nextStep,
+          icon: const Icon(Icons.arrow_forward, size: 16),
+          label: const Text('Proceed to Lift Plan Staging'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppTheme.accentRed,
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24,
+              vertical: 16,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppTheme.radiusMd),
+            ),
+          ),
+        ),
+      ),
+    ],
+  );
+}
   // ─── STEP 2: UPLOAD LIFT PLAN SPECS ───────────────────────────────────────
   Widget _buildStep2UploadLiftPlan() {
     return Column(
